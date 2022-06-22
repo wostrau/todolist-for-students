@@ -1,7 +1,8 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import '../App.css';
-import AddItemForm from './AddItemForm';
 import {changeFilterPropsType} from '../App';
+import AddItemForm from './AddItemForm';
+import EditableSpan from './EditableSpan';
 
 export type taskPropsType = {
     id: string
@@ -23,17 +24,7 @@ type TodolistPropsType = {
 function Todolist(props: TodolistPropsType) {
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [error, setError] = useState<null | string>(null);
-    /*const [filterValue, setFilterValue] = useState<changeFilterPropsType>('All');*/
-    /*const changeFilter = (value: changeFilterPropsType) => {
-        setFilterValue(value)
-    };
-    let filterTask = props.taskList;
-    if (filterValue === 'Active') {
-        filterTask = props.taskList.filter(el => !el.isDone)
-    }
-    if (filterValue === 'Completed') {
-        filterTask = props.taskList.filter(el => el.isDone)
-    }*/
+
     const onNewTitleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setNewTaskTitle(event.currentTarget.value)
     };
@@ -68,9 +59,7 @@ function Todolist(props: TodolistPropsType) {
                 {props.title}
                 <button onClick={onClickRemoveTodolistHandler}>✖️</button>
             </h3>
-            <AddItemForm
-                addItem={addTask}
-            />
+            <AddItemForm addItem={addTask}/>
             <div>
                 <input
                     className={error ? 'error' : ''}
@@ -97,7 +86,9 @@ function Todolist(props: TodolistPropsType) {
                                 onChange={onChangeHandler}
                                 checked={el.isDone}
                             />
-                            <span>{el.title}</span>
+                            <EditableSpan
+                                title={el.title}
+                            />
                         </li>
                     );
                 }))}

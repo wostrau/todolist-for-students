@@ -32,7 +32,6 @@ function App() {
         ],
     });
 
-
     function addTask(title: string, todolistId: string) {
         let newTask = {id: uuid4(), title: title, isDone: false};
         const tasks = tasksObj[todolistId];
