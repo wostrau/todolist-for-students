@@ -39,21 +39,32 @@ function App() {
         tasksObj[todolistId] = newTasks;
         setTask({...tasksObj});
     }
+
     function removeTask(id: string, todolistId: string) {
         const tasks = tasksObj[todolistId];
         const filteredTask = tasks.filter((el) => el.id !== id);
         tasksObj[todolistId] = filteredTask;
         setTask({...tasksObj});
     }
+
     function changeStatus(taskId: string, isDone: boolean, todolistId: string) {
         const tasks = tasksObj[todolistId];
         let task = tasks.find(el => el.id === taskId);
         if (task) {
-            task.isDone = isDone
-            setTask({...tasksObj})
+            task.isDone = isDone;
+            setTask({...tasksObj});
         }
-
     }
+
+    function changeTitle(taskId: string, newTitle: string, todolistId: string) {
+        const tasks = tasksObj[todolistId];
+        let task = tasks.find(el => el.id === taskId);
+        if (task) {
+            task.title = newTitle;
+            setTask({...tasksObj});
+        }
+    }
+
     function changeFilter(value: changeFilterPropsType, todolistId: string) {
         let todolist = todolists.find((el: { id: string; }) => el.id === todolistId);
         if (todolist) {
@@ -61,12 +72,22 @@ function App() {
             setTodolist([...todolists]);
         }
     }
+
     function removeTodolist(todolistId: string) {
         let filteredTodolist = todolists.filter(el => el.id !== todolistId);
         setTodolist(filteredTodolist);
         delete tasksObj[todolistId];
         setTask({...tasksObj});
     }
+
+    function changeTodolistTitle(todolistId: string, newTitle: string) {
+        const todolist = todolists.find(el => el.id === todolistId);
+        if (todolist) {
+            todolist.title = newTitle;
+            setTodolist([...todolists]);
+        }
+    }
+
     function addTodolist(title: string) {
         const todolist: todolistPropsType = {
             id: uuid4(),
@@ -103,7 +124,9 @@ function App() {
                         removeTask={removeTask}
                         changeFilter={changeFilter}
                         changeTaskStatus={changeStatus}
+                        changeTaskTitle={changeTitle}
                         removeTodolist={removeTodolist}
+                        changeTodolistTitle={changeTodolistTitle}
                         filter={el.filter}
                     />
                 );
