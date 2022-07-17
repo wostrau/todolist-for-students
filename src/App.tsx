@@ -3,16 +3,10 @@ import './App.css';
 import Todolist, {taskPropsType} from './Components/Todolist';
 import {v4 as uuid4} from 'uuid';
 import AddItemForm from './Components/AddItemForm';
+import {AppBar, Box, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu'
 
 export type changeFilterPropsType = 'All' | 'Active' | 'Completed'
-type todolistPropsType = {
-    id: string
-    title: string
-    filter: changeFilterPropsType
-}
-type TaskStateType = {
-    [key: string]: Array<taskPropsType>
-}
 
 function App() {
     const todolistId1 = uuid4();
@@ -103,36 +97,75 @@ function App() {
 
     return (
         <div className="App">
-            <AddItemForm
-                addItem={addTodolist}
-            />
-            {todolists.map((el) => {
-                let filterTask = tasksObj[el.id];
-                if (el.filter === 'Active') {
-                    filterTask = filterTask.filter(el => !el.isDone)
-                }
-                if (el.filter === 'Completed') {
-                    filterTask = filterTask.filter(el => el.isDone)
-                }
-                return (
-                    <Todolist
-                        key={el.id}
-                        id={el.id}
-                        title={el.title}
-                        taskList={filterTask}
-                        addTask={addTask}
-                        removeTask={removeTask}
-                        changeFilter={changeFilter}
-                        changeTaskStatus={changeStatus}
-                        changeTaskTitle={changeTitle}
-                        removeTodolist={removeTodolist}
-                        changeTodolistTitle={changeTodolistTitle}
-                        filter={el.filter}
+            <Box sx={{flexGrow: 1}}>
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{mr: 2}}
+                        >
+                            <MenuIcon/>
+                        </IconButton>
+                        <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                            preferances
+                        </Typography>
+                        <Button color="inherit">Login</Button>
+                    </Toolbar>
+                </AppBar>
+            </Box>
+            <Container fixed>
+                <Grid container style={{padding: '20px'}}>
+                    <AddItemForm
+                        addItem={addTodolist}
                     />
-                );
-            })}
+                </Grid>
+                <Grid container spacing={3}>
+                    {todolists.map((el) => {
+                        let filterTask = tasksObj[el.id];
+                        if (el.filter === 'Active') {
+                            filterTask = filterTask.filter(el => !el.isDone)
+                        }
+                        if (el.filter === 'Completed') {
+                            filterTask = filterTask.filter(el => el.isDone)
+                        }
+                        return (
+                            <Grid item>
+                                <Paper style={{padding: '20px'}}>
+                                    <Todolist
+                                        key={el.id}
+                                        id={el.id}
+                                        title={el.title}
+                                        taskList={filterTask}
+                                        addTask={addTask}
+                                        removeTask={removeTask}
+                                        changeFilter={changeFilter}
+                                        changeTaskStatus={changeStatus}
+                                        changeTaskTitle={changeTitle}
+                                        removeTodolist={removeTodolist}
+                                        changeTodolistTitle={changeTodolistTitle}
+                                        filter={el.filter}
+                                    />
+                                </Paper>
+                            </Grid>
+                        );
+                    })}
+                </Grid>
+            </Container>
         </div>
     );
+}
+
+type todolistPropsType = {
+    id: string
+    title: string
+    filter: changeFilterPropsType
+}
+
+type TaskStateType = {
+    [key: string]: Array<taskPropsType>
 }
 
 export default App;
