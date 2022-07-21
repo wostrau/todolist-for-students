@@ -8,6 +8,16 @@ import MenuIcon from '@mui/icons-material/Menu'
 
 export type changeFilterPropsType = 'All' | 'Active' | 'Completed'
 
+export type todolistPropsType = {
+    id: string
+    title: string
+    filter: changeFilterPropsType
+}
+
+type TaskStateType = {
+    [key: string]: Array<taskPropsType>
+}
+
 function App() {
     const todolistId1 = uuid4();
     const todolistId2 = uuid4();
@@ -156,16 +166,6 @@ function App() {
             </Container>
         </div>
     );
-}
-
-type todolistPropsType = {
-    id: string
-    title: string
-    filter: changeFilterPropsType
-}
-
-type TaskStateType = {
-    [key: string]: Array<taskPropsType>
 }
 
 export default App;
