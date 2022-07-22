@@ -98,7 +98,7 @@ function App() {
             filter: 'All',
             title: title
         };
-        setTodolist([todolist, ...todolists])
+        setTodolist([...todolists, todolist])
         setTask({
             ...tasksObj,
             [todolist.id]: []

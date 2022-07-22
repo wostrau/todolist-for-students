@@ -1,15 +1,43 @@
-import {todolistPropsType} from '../App';
+import {changeFilterPropsType, todolistPropsType} from '../App';
 import {v4 as uuid4} from 'uuid';
 
-export type ActionType = {
+type RemoveTodolistActionType = {
+    type: 'REMOVE-TODOLIST',
     id: string
-    type: string
-    title: string
-    [key: string]: any
 }
 
-export const todolistsReducer = (state: Array<todolistPropsType>, action: ActionType): Array<todolistPropsType> => {
-    let newState = {...state};
+type AddTodolistActionType = {
+    type: 'ADD-TODOLIST',
+    title: string
+}
+
+type ChangeTodolistActionType = {
+    type: 'CHANGE-TODOLIST-TITLE',
+    id: string,
+    title: string
+}
+
+type ChangeFilterTodolistActionType = {
+    type: 'CHANGE-TODOLIST-FILTER',
+    id: string
+    filter: changeFilterPropsType
+}
+
+export type ActionsType = RemoveTodolistActionType | AddTodolistActionType | ChangeTodolistActionType | ChangeFilterTodolistActionType
+
+export const RemoveTodolistAC = (todolistId: string): RemoveTodolistActionType => {
+    return {type: 'REMOVE-TODOLIST', id: todolistId};
+};
+
+export const AddTodolistAC = (title: string): AddTodolistActionType => {
+    return {type: 'ADD-TODOLIST', title: title};
+};
+
+export const ChangeTitleTodolistAC = (id: string):  => {
+    return {type: 'CHANGE-TODOLIST-TITLE', id: id, title: title};
+};
+
+export const todolistsReducer = (state: Array<todolistPropsType>, action: ActionsType): Array<todolistPropsType> => {
     switch (action.type) {
         case 'REMOVE-TODOLIST': {
             return state.filter(el => el.id !== action.id);
@@ -25,6 +53,13 @@ export const todolistsReducer = (state: Array<todolistPropsType>, action: Action
             const todolist = state.find(el => el.id === action.id);
             if (todolist) {
                 todolist.title = action.title;
+            }
+            return [...state]
+        }
+        case 'CHANGE-TODOLIST-FILTER': {
+            const todolist = state.find(el => el.id === action.id);
+            if (todolist) {
+                todolist.filter = action.filter;
             }
             return [...state]
         }
