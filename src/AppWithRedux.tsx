@@ -17,17 +17,17 @@ import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksRed
 
 export type changeFilterPropsType = 'All' | 'Active' | 'Completed'
 
-// export type todolistPropsType = {
-//     id: string
-//     title: string
-//     filter: changeFilterPropsType
-// }
+export type todolistPropsType = {
+    id: string
+    title: string
+    filter: changeFilterPropsType
+}
 
-// export type TaskStateType = {
-//     [key: string]: Array<taskPropsType>
-// }
+export type TaskStateType = {
+    [key: string]: Array<taskPropsType>
+}
 
-function AppWithReducers() {
+function AppWithRedux() {
     const todolistId1 = uuid4();
     const todolistId2 = uuid4();
     const [todolists, dispatchToTodolistsReducer] = userReducer(todolistsReducer, [
@@ -142,4 +142,4 @@ function AppWithReducers() {
     );
 }
 
-export default AppWithReducers;
+export default AppWithRedux;
