@@ -24,7 +24,11 @@ type ChangeFilterTodolistActionType = {
     filter: changeFilterPropsType
 };
 
-export type ActionsType = RemoveTodolistActionType | AddTodolistActionType | ChangeTodolistActionType | ChangeFilterTodolistActionType;
+export type ActionsType =
+    RemoveTodolistActionType
+    | AddTodolistActionType
+    | ChangeTodolistActionType
+    | ChangeFilterTodolistActionType;
 
 export const removeTodolistAC = (todolistId: string): RemoveTodolistActionType => {
     return {type: 'REMOVE-TODOLIST', id: todolistId};
@@ -42,7 +46,15 @@ export const changeFilterTodolistAC = (id: string, filter: changeFilterPropsType
     return {type: 'CHANGE-TODOLIST-FILTER', id: id, filter: filter};
 };
 
-export const todolistsReducer = (state: Array<todolistPropsType>, action: ActionsType): Array<todolistPropsType> => {
+export const todolistId1 = uuid4();
+export const todolistId2 = uuid4();
+
+const initialState: Array<todolistPropsType> = [
+    {id: todolistId1, title: 'What to learn', filter: 'All'},
+    {id: todolistId2, title: 'What to buy', filter: 'All'},
+];
+
+export const todolistsReducer = (state: Array<todolistPropsType> = initialState, action: ActionsType): Array<todolistPropsType> => {
     switch (action.type) {
         case 'REMOVE-TODOLIST': {
             return state.filter(el => el.id !== action.id);
@@ -69,6 +81,6 @@ export const todolistsReducer = (state: Array<todolistPropsType>, action: Action
             return [...state]
         }
         default:
-            throw new Error('I do not understand this type of action')
+            return state;
     }
 };

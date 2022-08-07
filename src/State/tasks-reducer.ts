@@ -1,6 +1,6 @@
 import {TaskStateType} from '../App';
 import {v4 as uuid4} from 'uuid';
-import {AddTodolistActionType, RemoveTodolistActionType} from './todolists-reducer';
+import {AddTodolistActionType, RemoveTodolistActionType, todolistId1, todolistId2} from './todolists-reducer';
 
 type RemoveTaskActionType = {
     type: 'REMOVE-TASK'
@@ -56,21 +56,30 @@ export const addTodolistAC = (title: string): AddTodolistActionType => {
     return {type: 'ADD-TODOLIST', title: title, todolistId: uuid4()};
 };
 
-export const tasksReducer = (state: TaskStateType, action: ActionsType): TaskStateType => {
+const initialState: TaskStateType = {
+    [todolistId1]: [
+        {id: uuid4(), title: 'REACT JS', isDone: false},
+        {id: uuid4(), title: 'TYPESCRIPT', isDone: false},
+    ],
+    [todolistId2]: [
+        {id: uuid4(), title: 'MONITOR', isDone: false},
+        {id: uuid4(), title: 'COMPUTER', isDone: true},
+    ],
+}
+
+export const tasksReducer = (state: TaskStateType = initialState, action: ActionsType): TaskStateType => {
     switch (action.type) {
         case 'REMOVE-TASK': {
             const stateCopy = {...state};
             const tasks = state[action.todolistId];
-            const filteredTasks = tasks.filter(t => t.id !== action.taskId);
-            stateCopy[action.todolistId] = filteredTasks;
+            stateCopy[action.todolistId] = tasks.filter(t => t.id !== action.taskId);
             return stateCopy;
         }
         case 'ADD-TASK': {
             const stateCopy = {...state};
             const tasks = stateCopy[action.todolistId];
             const newTask = {id: uuid4(), title: action.title, isDone: false}
-            const newTasks = [newTask, ...tasks];
-            stateCopy[action.todolistId] = newTasks;
+            stateCopy[action.todolistId] = [newTask, ...tasks];
             return stateCopy;
         }
         case 'CHANGE-TASK-STATUS': {
@@ -102,6 +111,6 @@ export const tasksReducer = (state: TaskStateType, action: ActionsType): TaskSta
             return stateCopy;
         }
         default:
-            throw new Error('I do not understand this type of action')
+            return state;
     }
 };
