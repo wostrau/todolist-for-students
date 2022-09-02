@@ -1,7 +1,7 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useCallback, useState} from 'react';
 import '../App.css';
 import {changeFilterPropsType} from '../App';
-import AddItemForm from './AddItemForm';
+import {AddItemForm} from './AddItemForm';
 import EditableSpan from './EditableSpan';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {Button, Checkbox, Icon, IconButton} from '@mui/material';
@@ -25,11 +25,11 @@ type TodolistPropsType = {
     changeTodolistTitle: (todolistId: string, newTitle: string) => void
 }
 
-function Todolist(props: TodolistPropsType) {
+export function Todolist(props: TodolistPropsType) {
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [error, setError] = useState<null | string>(null);
 
-    const onNewTitleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    /*const onNewTitleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setNewTaskTitle(event.currentTarget.value)
     };
     const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -46,16 +46,22 @@ function Todolist(props: TodolistPropsType) {
         } else {
             setError('Title is required')
         }
-    };
+    };*/
+
     const onAllClickHandler = () => props.changeFilter('All', props.id);
+
     const onActiveClickHandler = () => props.changeFilter('Active', props.id);
+
     const onCompletedClickHandler = () => props.changeFilter('Completed', props.id);
+
     const onClickRemoveTodolistHandler = () => {
         props.removeTodolist(props.id)
     };
-    const addTask = (title: string) => {
+
+    const addTask = useCallback((title: string) => {
         props.addTask(title, props.id)
-    };
+    }, []);
+
     const changeTodolistTitle = (newTitle: string) => {
         props.changeTodolistTitle(props.id, newTitle)
     };
@@ -68,7 +74,7 @@ function Todolist(props: TodolistPropsType) {
                     onChange={changeTodolistTitle}
                 />
                 <IconButton
-                    aria-label='delete'
+                    aria-label="delete"
                     onClick={onClickRemoveTodolistHandler}
                 >
                     <DeleteIcon/>
@@ -100,7 +106,7 @@ function Todolist(props: TodolistPropsType) {
                                 onChange={onChangeTitleHandler}
                             />
                             <IconButton
-                                aria-label='delete'
+                                aria-label="delete"
                                 onClick={onClickRemoveHandler}
                             >
                                 <DeleteIcon/>
@@ -132,5 +138,3 @@ function Todolist(props: TodolistPropsType) {
         </div>
     );
 }
-
-export default Todolist;

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
-import Todolist, {taskPropsType} from './Components/Todolist';
-import AddItemForm from './Components/AddItemForm';
+import {taskPropsType, Todolist} from './Components/Todolist';
+import {AddItemForm} from './Components/AddItemForm';
 import {AppBar, Box, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu'
 import {
@@ -60,9 +60,9 @@ function AppWithRedux() {
         dispatch(changeTitleTodolistAC(todolistId, newTitle));
     }
 
-    function addTodolist(title: string) {
+    const addTodolist = useCallback((title: string) => {
         dispatch(addTodolistAC(title));
-    }
+    }, []);
 
     return (
         <div className="App">
