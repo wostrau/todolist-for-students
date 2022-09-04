@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import './App.css';
-import {taskPropsType, Todolist} from './Components/Todolist';
+import {Todolist} from './Components/Todolist';
 import {v4 as uuid4} from 'uuid';
 import {AddItemForm} from './Components/AddItemForm';
 import {AppBar, Box, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu'
+import {TaskType} from './Components/Task';
 
 export type changeFilterPropsType = 'All' | 'Active' | 'Completed'
 
@@ -15,7 +16,7 @@ export type todolistPropsType = {
 }
 
 export type TaskStateType = {
-    [key: string]: Array<taskPropsType>
+    [key: string]: Array<TaskType>
 }
 
 function App() {
