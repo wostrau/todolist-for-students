@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import './App.css';
-import {Todolist} from './Components/Todolist';
-import {AddItemForm} from './Components/AddItemForm';
+import {Todolist} from './components/Todolist';
+import {AddItemForm} from './components/AddItemForm';
 import {AppBar, Box, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu'
 import {
@@ -9,11 +9,11 @@ import {
     changeFilterTodolistAC,
     changeTitleTodolistAC,
     removeTodolistAC
-} from './State/todolists-reducer';
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './State/tasks-reducer';
+} from './state/todolists-reducer';
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './state/tasks-reducer';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from './State/store';
-import {TaskType} from './Components/Task';
+import {AppRootStateType} from './state/store';
+import {TaskType} from './components/Task';
 
 export type changeFilterPropsType = 'All' | 'Active' | 'Completed'
 

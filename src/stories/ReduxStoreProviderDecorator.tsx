@@ -1,8 +1,8 @@
 import React from 'react'
 import {Provider} from 'react-redux';
-import {AppRootStateType, store} from '../State/store';
-import {tasksReducer} from '../State/tasks-reducer';
-import {todolistsReducer} from '../State/todolists-reducer';
+import {AppRootStateType, store} from '../state/store';
+import {tasksReducer} from '../state/tasks-reducer';
+import {todolistsReducer} from '../state/todolists-reducer';
 import {combineReducers} from 'redux';
 import {v4 as uuid4} from 'uuid';
 import {configureStore} from '@reduxjs/toolkit';

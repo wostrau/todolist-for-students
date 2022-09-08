@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import './App.css';
-import {Todolist} from './Components/Todolist';
+import {Todolist} from './components/Todolist';
 import {v4 as uuid4} from 'uuid';
-import {AddItemForm} from './Components/AddItemForm';
+import {AddItemForm} from './components/AddItemForm';
 import {AppBar, Box, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu'
-import {TaskType} from './Components/Task';
+import {TaskType} from './components/Task';
 
 export type changeFilterPropsType = 'All' | 'Active' | 'Completed'
 
@@ -174,20 +174,20 @@ export default App;
 /*
 import React from 'react';
 import './App.css';
-import Todolist, {taskPropsType} from './Components/Todolist';
+import Todolist, {taskPropsType} from './components/Todolist';
 import {v4 as uuid4} from 'uuid';
-import AddItemForm from './Components/AddItemForm';
+import AddItemForm from './components/AddItemForm';
 import {AppBar, Box, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu'
-import {userReducer} from './State/user-reducer';
+import {userReducer} from './state/user-reducer';
 import {
     addTodolistAC,
     changeFilterTodolistAC,
     changeTitleTodolistAC,
     removeTodolistAC,
     todolistsReducer
-} from './State/todolists-reducer';
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './State/tasks-reducer';
+} from './state/todolists-reducer';
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './state/tasks-reducer';
 
 export type changeFilterPropsType = 'All' | 'Active' | 'Completed'
 
