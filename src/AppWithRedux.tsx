@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {Todolist} from './components/Todolist';
 import {AddItemForm} from './components/AddItemForm';
@@ -7,7 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import {
     addTodolistAC, changeFilterPropsType,
     changeFilterTodolistAC,
-    changeTitleTodolistAC,
+    changeTitleTodolistAC, fetchTodolistTC,
     removeTodolistAC, TodolistDomainType
 } from './state/todolists-reducer';
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './state/tasks-reducer';
@@ -20,9 +20,13 @@ export type TaskStateType = {
 }
 
 function AppWithRedux() {
-    const dispatch = useDispatch();
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists);
     const tasksObj = useSelector<AppRootStateType, TaskStateType>(state => state.tasks);
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        dispatch(fetchTodolistsTC());
+    },[]);
 
     const addTask = useCallback((title: string, todolistId: string) => {
         dispatch(addTaskAC(title, todolistId));
