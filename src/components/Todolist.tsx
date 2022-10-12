@@ -1,11 +1,12 @@
 import React, {useCallback, useState} from 'react';
 import '../App.css';
-import {changeFilterPropsType} from '../App';
+import {changeFilterPropsType} from '../state/todolists-reducer';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {Button, IconButton} from '@mui/material';
-import {Task, TaskType} from './Task';
+import {Task} from './Task';
+import {TaskStatuses, TaskType} from '../api/todolists-api';
 
 type TodolistPropsType = {
     id: string
@@ -14,7 +15,7 @@ type TodolistPropsType = {
     addTask: (title: string, todolistId: string) => void
     changeFilter: (value: changeFilterPropsType, id: string) => void
     removeTask: (id: string, todolistId: string) => void
-    changeTaskStatus: (taskId: string, isDone: boolean, todolistId: string) => void
+    changeTaskStatus: (taskId: string, status: TaskStatuses, todolistId: string) => void
     changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
     filter: changeFilterPropsType
     removeTodolist: (todolistId: string) => void
@@ -24,25 +25,6 @@ type TodolistPropsType = {
 export const Todolist = React.memo((props: TodolistPropsType) => {
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [error, setError] = useState<null | string>(null);
-
-    /*const onNewTitleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setNewTaskTitle(event.currentTarget.value)
-    };
-    const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
-        if (event.key === 'Enter') {
-            props.addTask(newTaskTitle, props.id)
-            setNewTaskTitle('')
-        }
-    };
-    const addTasks = () => {
-        if (newTaskTitle.trim() !== '') {
-            props.addTask(newTaskTitle.trim(), props.id)
-            setNewTaskTitle('')
-        } else {
-            setError('Title is required')
-        }
-    };*/
 
     const onAllClickHandler = useCallback(() => {
         props.changeFilter('All', props.id)
@@ -71,10 +53,10 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     let filterTask = props.taskList;
 
     if (props.filter === 'Active') {
-        filterTask = props.taskList.filter((el => !el.isDone))
+        filterTask = props.taskList.filter((el => el.status !== TaskStatuses.Completed))
     }
     if (props.filter === 'Completed') {
-        filterTask = props.taskList.filter((el => el.isDone))
+        filterTask = props.taskList.filter((el => el.status === TaskStatuses.Completed))
     }
 
     return (

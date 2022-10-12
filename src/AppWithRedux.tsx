@@ -5,23 +5,15 @@ import {AddItemForm} from './components/AddItemForm';
 import {AppBar, Box, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu'
 import {
-    addTodolistAC,
+    addTodolistAC, changeFilterPropsType,
     changeFilterTodolistAC,
     changeTitleTodolistAC,
-    removeTodolistAC
+    removeTodolistAC, TodolistDomainType
 } from './state/todolists-reducer';
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './state/tasks-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './state/store';
-import {TaskType} from './components/Task';
-
-export type changeFilterPropsType = 'All' | 'Active' | 'Completed'
-
-export type todolistPropsType = {
-    id: string
-    title: string
-    filter: changeFilterPropsType
-}
+import {TaskStatuses, TaskType} from './api/todolists-api';
 
 export type TaskStateType = {
     [key: string]: Array<TaskType>
@@ -29,7 +21,7 @@ export type TaskStateType = {
 
 function AppWithRedux() {
     const dispatch = useDispatch();
-    const todolists = useSelector<AppRootStateType, Array<todolistPropsType>>(state => state.todolists);
+    const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists);
     const tasksObj = useSelector<AppRootStateType, TaskStateType>(state => state.tasks);
 
     const addTask = useCallback((title: string, todolistId: string) => {
@@ -40,8 +32,8 @@ function AppWithRedux() {
         dispatch(removeTaskAC(id, todolistId));
     }, [dispatch]);
 
-    const changeStatus = useCallback((taskId: string, isDone: boolean, todolistId: string) => {
-        dispatch(changeTaskStatusAC(taskId, todolistId, isDone));
+    const changeStatus = useCallback((taskId: string, status: TaskStatuses, todolistId: string,) => {
+        dispatch(changeTaskStatusAC(taskId, status, todolistId));
     }, [dispatch]);
 
     const changeTitle = useCallback((taskId: string, newTitle: string, todolistId: string) => {
@@ -93,7 +85,7 @@ function AppWithRedux() {
                     />
                 </Grid>
                 <Grid container spacing={3}>
-                    {todolists.map((el: todolistPropsType) => {
+                    {todolists.map((el: TodolistDomainType) => {
                         let filterTask = tasksObj[el.id];
                         return (
                             <Grid item>

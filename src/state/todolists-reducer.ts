@@ -1,5 +1,5 @@
-import {changeFilterPropsType, todolistPropsType} from '../App';
 import {v4 as uuid4} from 'uuid';
+import {TodolistType} from '../api/todolists-api';
 
 export type RemoveTodolistActionType = {
     type: 'REMOVE-TODOLIST',
@@ -30,6 +30,12 @@ export type ActionsType =
     | ChangeTodolistActionType
     | ChangeFilterTodolistActionType;
 
+export type changeFilterPropsType = 'All' | 'Active' | 'Completed';
+
+export type TodolistDomainType = TodolistType & {
+    filter: changeFilterPropsType
+};
+
 export const removeTodolistAC = (todolistId: string): RemoveTodolistActionType => {
     return {type: 'REMOVE-TODOLIST', id: todolistId};
 };
@@ -49,12 +55,24 @@ export const changeFilterTodolistAC = (id: string, filter: changeFilterPropsType
 export const todolistId1 = uuid4();
 export const todolistId2 = uuid4();
 
-const initialState: Array<todolistPropsType> = [
-    {id: todolistId1, title: 'What to learn', filter: 'All'},
-    {id: todolistId2, title: 'What to buy', filter: 'All'},
+const initialState: Array<TodolistDomainType> = [
+    {
+        id: todolistId1,
+        title: 'What to learn',
+        filter: 'All',
+        addedDate: '',
+        order: 0
+    },
+    {
+        id: todolistId2,
+        title: 'What to buy',
+        filter: 'All',
+        addedDate: '',
+        order: 0
+    },
 ];
 
-export const todolistsReducer = (state: Array<todolistPropsType> = initialState, action: ActionsType): Array<todolistPropsType> => {
+export const todolistsReducer = (state: Array<TodolistDomainType> = initialState, action: ActionsType): Array<TodolistDomainType> => {
     switch (action.type) {
         case 'REMOVE-TODOLIST': {
             return state.filter(el => el.id !== action.id);
@@ -63,7 +81,9 @@ export const todolistsReducer = (state: Array<todolistPropsType> = initialState,
             return [...state, {
                 id: action.todolistId,
                 title: action.title,
-                filter: 'All'
+                filter: 'All',
+                addedDate: '',
+                order: 0
             }];
         }
         case 'CHANGE-TODOLIST-TITLE': {
