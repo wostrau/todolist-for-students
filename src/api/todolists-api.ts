@@ -31,13 +31,14 @@ export enum TaskStatuses {
     Completed,
     Draft
 };
- export enum TaskPriorities {
-     Low,
-     Middle,
-     Hi,
-     Urgently,
-     Later,
- }
+
+export enum TaskPriorities {
+    Low,
+    Middle,
+    Hi,
+    Urgently,
+    Later,
+}
 
 export type TaskType = {
     id: string
@@ -55,7 +56,6 @@ export type TaskType = {
 type UpdateTaskType = {
     title: string
     description: string
-    isDone: boolean
     status: number
     priority: number
     startDate: string
@@ -90,7 +90,14 @@ export const todolistsAPI = {
     createTask(todolistId: string, title: string) {
         return instance.post<ResponseType<TaskType>>(`todo-lists/${todolistId}/tasks`, {title: title});
     },
-    updateTask(todolistId: string, taskId: string, model: { title: string }) {
-        return instance.put<UpdateTaskType>(`todo-lists/${todolistId}/tasks/${taskId}`, {title: model.title});
+    updateTask(todolistId: string, taskId: string, model: UpdateTaskType) {
+        return instance.put<UpdateTaskType>(`todo-lists/${todolistId}/tasks/${taskId}`, {
+            title: model.title,
+            description: model.description,
+            status: model.status,
+            priority: model.priority,
+            startDate: model.startDate,
+            deadline: model.deadline
+        });
     },
 };
