@@ -7,7 +7,8 @@ import {
     todolistId1,
     todolistId2
 } from './todolists-reducer';
-import {TaskPriorities, TaskStatuses} from '../api/todolists-api';
+import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI} from '../api/todolists-api';
+import {Dispatch} from 'redux';
 
 type RemoveTaskActionType = {
     type: 'REMOVE-TASK'
@@ -35,6 +36,12 @@ type ChangeTaskTitleActionType = {
     title: string
 }
 
+type SetTasksActionType = {
+    type: 'SET-TASKS'
+    tasks: Array<TaskType>
+    todolistId: string
+}
+
 export type ActionsType =
     RemoveTaskActionType
     | AddTaskActionType
@@ -42,7 +49,8 @@ export type ActionsType =
     | ChangeTaskTitleActionType
     | AddTodolistActionType
     | RemoveTodolistActionType
-    | SetTodolistsActionType;
+    | SetTodolistsActionType
+    | SetTasksActionType;
 
 export const removeTaskAC = (taskId: string, todolistId: string): RemoveTaskActionType => {
     return {type: 'REMOVE-TASK', taskId: taskId, todolistId: todolistId};
@@ -62,6 +70,19 @@ export const changeTaskTitleAC = (taskId: string, todolistId: string, title: str
 
 export const addTodolistAC = (title: string): AddTodolistActionType => {
     return {type: 'ADD-TODOLIST', title: title, todolistId: uuid4()};
+};
+
+export const setTasksAC = (tasks: Array<TaskType>, todolistId: string): SetTasksActionType => {
+    return {type: 'SET-TASKS', tasks: tasks, todolistId: todolistId};
+};
+
+export const fetchTasksTC = (todolistId: string) => {
+    return (dispatch: Dispatch) => {
+        todolistsAPI.getTodolists()
+            .then((res) => {
+                dispatch(setTasksAC(res.data))
+            })
+    };
 };
 
 const initialState: TaskStateType = {
@@ -177,9 +198,13 @@ export const tasksReducer = (state: TaskStateType = initialState, action: Action
             const stateCopy = {...state};
 
             action.todolists.forEach(tl => {
-               stateCopy[tl.id] = [];
+                stateCopy[tl.id] = [];
             });
-
+            return stateCopy;
+        }
+        case 'SET-TASKS': {
+            const stateCopy = {...state};
+            stateCopy[action.todolistId] = action.tasks;
             return stateCopy;
         }
         default:

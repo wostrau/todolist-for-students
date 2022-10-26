@@ -7,7 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import {
     addTodolistAC, changeFilterPropsType,
     changeFilterTodolistAC,
-    changeTitleTodolistAC, fetchTodolistTC,
+    changeTitleTodolistAC, fetchTodolistsTC,
     removeTodolistAC, TodolistDomainType
 } from './state/todolists-reducer';
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './state/tasks-reducer';
