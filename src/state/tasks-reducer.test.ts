@@ -4,7 +4,8 @@ import {
     addTodolistAC,
     changeTaskStatusAC,
     changeTaskTitleAC,
-    removeTaskAC, setTasksAC,
+    removeTaskAC,
+    setTasksAC,
     tasksReducer
 } from './tasks-reducer';
 import {removeTodolistAC, setTodolistsAC} from './todolists-reducer';
@@ -78,7 +79,20 @@ test('correct task should be deleted from correct way', () => {
 });
 
 test('new task should be added correctly', () => {
-    const action = addTaskAC('HEADPHONES', 'todolistId2');
+    //const action = addTaskAC('HEADPHONES', 'todolistId2');
+    const action = addTaskAC({
+        todolistId: 'todolistId2',
+        status: TaskStatuses.New,
+        addedDate: '',
+        deadline: '',
+        id: 'taskId1',
+        order: 0,
+        description: '',
+        title: 'HEADPHONES',
+        priority: TaskPriorities.Middle,
+        startDate: ''
+    });
+
     const endState = tasksReducer(startState, action);
 
     expect(endState['todolistId1'].length).toBe(2);

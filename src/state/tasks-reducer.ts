@@ -18,8 +18,7 @@ type RemoveTaskActionType = {
 
 type AddTaskActionType = {
     type: 'ADD-TASK'
-    title: string
-    todolistId: string
+    task: TaskType
 }
 
 type ChangeTaskStatusActionType = {
@@ -56,8 +55,8 @@ export const removeTaskAC = (taskId: string, todolistId: string): RemoveTaskActi
     return {type: 'REMOVE-TASK', taskId: taskId, todolistId: todolistId};
 };
 
-export const addTaskAC = (title: string, todolistId: string): AddTaskActionType => {
-    return {type: 'ADD-TASK', todolistId: todolistId, title: title};
+export const addTaskAC = (task: TaskType): AddTaskActionType => {
+    return {type: 'ADD-TASK', task};
 };
 
 export const changeTaskStatusAC = (taskId: string, status: TaskStatuses, todolistId: string): ChangeTaskStatusActionType => {
@@ -81,6 +80,25 @@ export const fetchTasksTC = (todolistId: string) => {
         todolistsAPI.getTask(todolistId)
             .then((res) => {
                 dispatch(setTasksAC(res.data.items, todolistId))
+            })
+    };
+};
+
+export const removeTaskTC = (taskId: string, todolistId: string) => {
+    return (dispatch: Dispatch) => {
+        todolistsAPI.deleteTask(todolistId, taskId)
+            .then((res) => {
+                const action = removeTaskAC(taskId, todolistId);
+                dispatch(action);
+            })
+    };
+};
+
+export const addTaskTC = (title: string, todolistId: string) => {
+    return (dispatch: Dispatch) => {
+        todolistsAPI.createTask(todolistId, title)
+            .then((res) => {
+                res.data.data.item
             })
     };
 };
@@ -150,20 +168,10 @@ export const tasksReducer = (state: TaskStateType = initialState, action: Action
         }
         case 'ADD-TASK': {
             const stateCopy = {...state};
-            const tasks = stateCopy[action.todolistId];
-            const newTask = {
-                id: uuid4(),
-                todolistId: action.todolistId,
-                title: action.title,
-                order: 0,
-                status: TaskStatuses.New,
-                priority: TaskPriorities.Middle,
-                addedDate: '',
-                startDate: '',
-                deadline: '',
-                description: ''
-            }
-            stateCopy[action.todolistId] = [newTask, ...tasks];
+            const newTask = action.task;
+            const tasks = stateCopy[newTask.todolistId];
+            const newTasks = [newTask, ...tasks];
+            stateCopy[newTask.todolistId] = newTasks;
             return stateCopy;
         }
         case 'CHANGE-TASK-STATUS': {
