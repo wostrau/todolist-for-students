@@ -5,10 +5,10 @@ import {AddItemForm} from './components/AddItemForm';
 import {AppBar, Box, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu'
 import {
-    addTodolistAC, changeFilterPropsType,
+    addTodolistAC, addTodolistTC, changeFilterPropsType,
     changeFilterTodolistAC,
     changeTitleTodolistAC, fetchTodolistsTC,
-    removeTodolistAC, TodolistDomainType
+    removeTodolistAC, removeTodolistTC, TodolistDomainType
 } from './state/todolists-reducer';
 import {
     addTaskAC,
@@ -63,8 +63,8 @@ function AppWithRedux() {
     }, [dispatch]);
 
     const removeTodolist = useCallback((todolistId: string) => {
-        const action = removeTodolistAC(todolistId);
-        dispatch(action);
+        const thunk = removeTodolistTC(todolistId);
+        dispatch(thunk);
     }, [dispatch]);
 
     const changeTodolistTitle = useCallback((todolistId: string, newTitle: string) => {
@@ -72,8 +72,9 @@ function AppWithRedux() {
     }, [dispatch]);
 
     const addTodolist = useCallback((title: string) => {
-        dispatch(addTodolistAC(title));
-    }, [dispatch]);
+        const thunk = addTodolistTC(title);
+        dispatch(thunk);
+    }, []);
 
     return (
         <div className="App">
