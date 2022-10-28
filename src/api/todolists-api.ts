@@ -53,11 +53,11 @@ export type TaskType = {
     description: string
 }
 
-type UpdateTaskType = {
+export type UpdateTaskType = {
     title: string
     description: string
-    status: number
-    priority: number
+    status: TaskStatuses
+    priority: TaskPriorities
     startDate: string
     deadline: string
 }

@@ -1,13 +1,5 @@
 import {TaskStateType} from '../App';
-import {
-    addTaskAC,
-    addTodolistAC,
-    changeTaskStatusAC,
-    changeTaskTitleAC,
-    removeTaskAC,
-    setTasksAC,
-    tasksReducer
-} from './tasks-reducer';
+import {addTaskAC, addTodolistAC, removeTaskAC, setTasksAC, tasksReducer, updateTaskAC} from './tasks-reducer';
 import {removeTodolistAC, setTodolistsAC} from './todolists-reducer';
 import {TaskPriorities, TaskStatuses} from '../api/todolists-api';
 
@@ -103,7 +95,7 @@ test('new task should be added correctly', () => {
 });
 
 test('task status should be changed correctly', () => {
-    const action = changeTaskStatusAC('2', TaskStatuses.New, 'todolistId2');
+    const action = updateTaskAC('2', {status: TaskStatuses.New}, 'todolistId2');
     const endState = tasksReducer(startState, action);
 
     expect(endState['todolistId1'][1].status === TaskStatuses.Completed).toBeFalsy();
@@ -111,7 +103,7 @@ test('task status should be changed correctly', () => {
 });
 
 test('task title should be changed correctly', () => {
-    const action = changeTaskTitleAC('2', 'todolistId2', 'HEADPHONES');
+    const action = updateTaskAC('2', {title: 'HEADPHONES'}, 'todolistId2');
     const endState = tasksReducer(startState, action);
 
     expect(endState['todolistId1'][1].title).toBe('TYPESCRIPT');
@@ -119,7 +111,12 @@ test('task title should be changed correctly', () => {
 });
 
 test('new array should be added when new todolist is added', () => {
-    const action = addTodolistAC('new todolist');
+    const action = addTodolistAC({
+        id: '',
+        order: 0,
+        title: 'new todolist',
+        addedDate: ''
+    });
     const endState = tasksReducer(startState, action);
 
     const keys = Object.keys(endState);
