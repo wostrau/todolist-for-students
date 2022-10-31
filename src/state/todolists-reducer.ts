@@ -2,26 +2,8 @@ import {v4 as uuid4} from 'uuid';
 import {todolistsAPI, TodolistType} from '../api/todolists-api';
 import {Dispatch} from 'redux';
 
-export type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>;
-export type AddTodolistActionType = ReturnType<typeof addTodolistAC>;
-export type SetTodolistsActionType = ReturnType<typeof setTodolistsAC>;
-
-export type ActionsType =
-    | RemoveTodolistActionType
-    | AddTodolistActionType
-    | SetTodolistsActionType
-    | ReturnType<typeof changeTitleTodolistAC>
-    | ReturnType<typeof changeFilterTodolistAC>
-
-export type changeFilterPropsType = 'All' | 'Active' | 'Completed';
-
-export type TodolistDomainType = TodolistType & {
-    filter: changeFilterPropsType
-};
-
 export const todolistId1 = uuid4();
 export const todolistId2 = uuid4();
-
 const initialState: Array<TodolistDomainType> = [
     {
         id: todolistId1,
@@ -75,59 +57,61 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
     }
 };
 
+//actions
 export const removeTodolistAC = (id: string) => ({type: 'REMOVE-TODOLIST', id} as const);
-
 export const addTodolistAC = (todolist: TodolistType) => ({type: 'ADD-TODOLIST', todolist} as const);
-
 export const changeTitleTodolistAC = (id: string, title: string) => ({
     type: 'CHANGE-TODOLIST-TITLE',
     id,
     title
 } as const);
-
 export const changeFilterTodolistAC = (id: string, filter: changeFilterPropsType) => ({
     type: 'CHANGE-TODOLIST-FILTER',
     id,
     filter
 } as const);
-
 export const setTodolistsAC = (todolists: Array<TodolistType>) => ({
     type: 'SET-TODOLISTS',
     todolists
 } as const);
 
-export const fetchTodolistsTC = () => {
-    return (dispatch: Dispatch) => {
-        todolistsAPI.getTodolists()
-            .then((res) => {
-                dispatch(setTodolistsAC(res.data))
-            })
-    };
+//thunks
+export const fetchTodolistsTC = () => (dispatch: Dispatch) => {
+    todolistsAPI.getTodolists()
+        .then((res) => {
+            dispatch(setTodolistsAC(res.data))
+        })
+};
+export const removeTodolistTC = (todolistId: string) => (dispatch: Dispatch) => {
+    todolistsAPI.deleteTodolist(todolistId)
+        .then((res) => {
+            dispatch(removeTodolistAC(todolistId))
+        })
+};
+export const addTodolistTC = (title: string) => (dispatch: Dispatch) => {
+    todolistsAPI.createTodolist(title)
+        .then((res) => {
+            dispatch(addTodolistAC(res.data.data.item))
+        })
+};
+export const changeTitleTodolistTC = (id: string, title: string) => (dispatch: Dispatch) => {
+    todolistsAPI.updateTodolist(id, title)
+        .then((res) => {
+            dispatch(changeTitleTodolistAC(id, title))
+        })
 };
 
-export const removeTodolistTC = (todolistId: string) => {
-    return (dispatch: Dispatch) => {
-        todolistsAPI.deleteTodolist(todolistId)
-            .then((res) => {
-                dispatch(removeTodolistAC(todolistId))
-            })
-    };
+//types
+export type changeFilterPropsType = 'All' | 'Active' | 'Completed';
+export type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>;
+export type AddTodolistActionType = ReturnType<typeof addTodolistAC>;
+export type SetTodolistsActionType = ReturnType<typeof setTodolistsAC>;
+export type TodolistDomainType = TodolistType & {
+    filter: changeFilterPropsType
 };
-
-export const addTodolistTC = (title: string) => {
-    return (dispatch: Dispatch) => {
-        todolistsAPI.createTodolist(title)
-            .then((res) => {
-                dispatch(addTodolistAC(res.data.data.item))
-            })
-    };
-};
-
-export const changeTitleTodolistTC = (id: string, title: string) => {
-    return (dispatch: Dispatch) => {
-        todolistsAPI.updateTodolist(id, title)
-            .then((res) => {
-                dispatch(changeTitleTodolistAC(id, title))
-            })
-    };
-};
+export type ActionsType =
+    | RemoveTodolistActionType
+    | AddTodolistActionType
+    | SetTodolistsActionType
+    | ReturnType<typeof changeTitleTodolistAC>
+    | ReturnType<typeof changeFilterTodolistAC>

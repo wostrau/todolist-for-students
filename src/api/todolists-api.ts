@@ -6,68 +6,12 @@ const settings = {
         'API-KEY': '96e14868-2995-4951-a0b1-5ff5cded4fa9'
     }
 };
-
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
     ...settings
-})
+});
 
-export type TodolistType = {
-    id: string
-    title: string
-    addedDate: string
-    order: number
-};
-
-type ResponseType<D = {}> = {
-    resultCode: number
-    messages: Array<string>
-    data: D
-};
-
-export enum TaskStatuses {
-    New,
-    InProgress,
-    Completed,
-    Draft
-};
-
-export enum TaskPriorities {
-    Low,
-    Middle,
-    Hi,
-    Urgently,
-    Later,
-}
-
-export type TaskType = {
-    id: string
-    todolistId: string
-    title: string
-    order: number
-    status: TaskStatuses
-    priority: TaskPriorities
-    addedDate: string
-    startDate: string
-    deadline: string
-    description: string
-}
-
-export type UpdateTaskType = {
-    title: string
-    description: string
-    status: TaskStatuses
-    priority: TaskPriorities
-    startDate: string
-    deadline: string
-}
-
-type TaskResponseType = {
-    error: string | null
-    totalCount: number
-    items: Array<TaskType>
-}
-
+//api
 export const todolistsAPI = {
     getTodolists() {
         return instance.get<TodolistType[]>('todo-lists');
@@ -101,3 +45,54 @@ export const todolistsAPI = {
         });
     },
 };
+
+//types
+type ResponseType<D = {}> = {
+    resultCode: number
+    messages: Array<string>
+    data: D
+};
+type TaskResponseType = {
+    error: string | null
+    totalCount: number
+    items: Array<TaskType>
+};
+export type TodolistType = {
+    id: string
+    title: string
+    addedDate: string
+    order: number
+};
+export type TaskType = {
+    id: string
+    todolistId: string
+    title: string
+    order: number
+    status: TaskStatuses
+    priority: TaskPriorities
+    addedDate: string
+    startDate: string
+    deadline: string
+    description: string
+};
+export type UpdateTaskType = {
+    title: string
+    description: string
+    status: TaskStatuses
+    priority: TaskPriorities
+    startDate: string
+    deadline: string
+};
+export enum TaskStatuses {
+    New,
+    InProgress,
+    Completed,
+    Draft
+}
+export enum TaskPriorities {
+    Low,
+    Middle,
+    Hi,
+    Urgently,
+    Later,
+}
