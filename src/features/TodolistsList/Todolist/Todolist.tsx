@@ -1,14 +1,14 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import '../App.css';
-import {changeFilterPropsType, fetchTodolistsTC} from '../state/todolists-reducer';
-import {AddItemForm} from './AddItemForm';
-import {EditableSpan} from './EditableSpan';
+import '../../../app/App.css';
+import {changeFilterPropsType, fetchTodolistsTC} from '../todolists-reducer';
+import {AddItemForm} from '../../../components/AddItemForm/AddItemForm';
+import {EditableSpan} from '../../../components/EditableSpan/EditableSpan';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {Button, IconButton} from '@mui/material';
-import {Task} from './Task';
-import {TaskStatuses, TaskType} from '../api/todolists-api';
+import {Task} from './Task/Task';
+import {TaskStatuses, TaskType} from '../../../api/todolists-api';
 import {useDispatch} from 'react-redux';
-import {fetchTasksTC} from '../state/tasks-reducer';
+import {fetchTasksTC} from '../tasks-reducer';
 
 type TodolistPropsType = {
     id: string
@@ -32,7 +32,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
 
     useEffect(()=>{
         const thunk = fetchTasksTC(props.id);
-        dispatch(thunk);
+        thunk(dispatch);
     }, []);
 
     const onAllClickHandler = useCallback(() => {
