@@ -11,12 +11,13 @@ import {
 import {v4 as uuid4} from 'uuid';
 import {TodolistType} from '../../api/todolists-api';
 
-
+let todolistId1: string;
+let todolistId2: string;
 let startState: Array<TodolistDomainType> = [];
-beforeEach(() => {
-    const todolistId1 = uuid4();
-    const todolistId2 = uuid4();
 
+beforeEach(() => {
+    todolistId1 = uuid4();
+    todolistId2 = uuid4();
     startState = [
         {
             id: todolistId1,
@@ -33,7 +34,7 @@ beforeEach(() => {
             order: 0
         },
     ];
-})
+});
 
 test('correct todolist should be removed', () => {
     const action = removeTodolistAC(startState[0].id);
