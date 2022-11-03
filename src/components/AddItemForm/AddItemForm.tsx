@@ -5,9 +5,10 @@ import {AddTask} from '@mui/icons-material';
 
 type AddItemFormPropsType = {
     addItem: (newTaskTitle: string) => void
+    disabled?: boolean
 };
 
-export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
+export const AddItemForm = React.memo(({addItem, disabled = false}: AddItemFormPropsType) => {
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [error, setError] = useState<null | string>(null);
 
@@ -19,13 +20,13 @@ export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
             setError(null);
         }
         if (event.key === 'Enter') {
-            props.addItem(newTaskTitle);
+            addItemHandler();
             setNewTaskTitle('');
         }
     };
-    const addItem = () => {
+    const addItemHandler = () => {
         if (newTaskTitle.trim() !== '') {
-            props.addItem(newTaskTitle.trim());
+            addItem(newTaskTitle.trim());
             setNewTaskTitle('');
         } else {
             setError('Title is required');
@@ -35,6 +36,7 @@ export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
     return (
         <div>
             <TextField
+                disabled={disabled}
                 label="add title"
                 variant="standard"
                 error={!!error}
@@ -44,7 +46,8 @@ export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
                 onKeyDown={onKeyPressHandler}
             />
             <IconButton
-                onClick={addItem}
+                onClick={addItemHandler}
+                disabled={disabled}
             >
                 <AddTask/>
             </IconButton>

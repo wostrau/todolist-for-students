@@ -1,4 +1,4 @@
-import {applyMiddleware, combineReducers, compose, createStore} from 'redux';
+import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {todolistsReducer} from '../features/TodolistsList/todolists-reducer';
 import {tasksReducer} from '../features/TodolistsList/tasks-reducer';
 import {appReducer} from './app-reducer';
@@ -10,15 +10,10 @@ const rootReducer = combineReducers({
     app: appReducer
 });
 
+export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
+
 export type AppRootStateType = ReturnType<typeof rootReducer>;
 
-const middlewareEnhancer = applyMiddleware(thunkMiddleware);
-const composedEnhancers = compose(middlewareEnhancer);
-
-export const store = createStore(rootReducer, undefined, composedEnhancers);
-
-
-//export const store = configureStore({reducer: rootReducer, middleware: [applyMiddleware(thunkMiddleware)]});
-
+//это нужно чтобы можно было в консоли браузера обращаться к store в любой момент
 // @ts-ignore
 window.store = store;
