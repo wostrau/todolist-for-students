@@ -40,7 +40,10 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
 };
 
 //actions
-export const removeTodolistAC = (id: string) => ({type: 'REMOVE-TODOLIST', id} as const);
+export const setTodolistsAC = (todolists: Array<TodolistType>) => ({
+    type: 'SET-TODOLISTS',
+    todolists
+} as const);
 export const addTodolistAC = (todolist: TodolistType) => ({type: 'ADD-TODOLIST', todolist} as const);
 export const changeTitleTodolistAC = (id: string, title: string) => ({
     type: 'CHANGE-TODOLIST-TITLE',
@@ -52,22 +55,13 @@ export const changeFilterTodolistAC = (id: string, filter: changeFilterPropsType
     id,
     filter
 } as const);
-export const setTodolistsAC = (todolists: Array<TodolistType>) => ({
-    type: 'SET-TODOLISTS',
-    todolists
-} as const);
+export const removeTodolistAC = (id: string) => ({type: 'REMOVE-TODOLIST', id} as const);
 
 //thunks
 export const fetchTodolistsTC = () => (dispatch: any) => {
     todolistsAPI.getTodolists()
         .then((res) => {
             dispatch(setTodolistsAC(res.data))
-        })
-};
-export const removeTodolistTC = (todolistId: string) => (dispatch: any) => {
-    todolistsAPI.deleteTodolist(todolistId)
-        .then((res) => {
-            dispatch(removeTodolistAC(todolistId))
         })
 };
 export const addTodolistTC = (title: string) => (dispatch: any) => {
@@ -80,6 +74,12 @@ export const changeTitleTodolistTC = (id: string, title: string) => (dispatch: a
     todolistsAPI.updateTodolist(id, title)
         .then((res) => {
             dispatch(changeTitleTodolistAC(id, title))
+        })
+};
+export const removeTodolistTC = (todolistId: string) => (dispatch: any) => {
+    todolistsAPI.deleteTodolist(todolistId)
+        .then((res) => {
+            dispatch(removeTodolistAC(todolistId))
         })
 };
 
