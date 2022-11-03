@@ -3,9 +3,8 @@ import {Provider} from 'react-redux';
 import {AppRootStateType, store} from '../app/store';
 import {tasksReducer} from '../features/TodolistsList/tasks-reducer';
 import {todolistsReducer} from '../features/TodolistsList/todolists-reducer';
-import {combineReducers} from 'redux';
+import {combineReducers, createStore} from 'redux';
 import {v4 as uuid4} from 'uuid';
-import {configureStore} from '@reduxjs/toolkit';
 import {TaskPriorities, TaskStatuses} from '../api/todolists-api';
 
 const rootReducer = combineReducers({
@@ -20,14 +19,16 @@ const initialGlobalState: AppRootStateType = {
             title: 'What to learn',
             filter: 'All',
             addedDate: '',
-            order: 0
+            order: 0,
+            entityStatus: 'idle'
         },
         {
             id: 'todolistId2',
             title: 'What to buy',
             filter: 'All',
             addedDate: '',
-            order: 0
+            order: 0,
+            entityStatus: 'idle'
         }
     ],
     tasks: {
@@ -90,9 +91,8 @@ const initialGlobalState: AppRootStateType = {
     }
 };
 
-// @ts-ignore
-export const storyBookStore = configureStore({reducer: rootReducer, initialGlobalState: AppRootStateType});
+export const storyBookStore = createStore(rootReducer, initialGlobalState);
 
 export const ReduxStoreProviderDecorator = (storyFn: any) => {
-    return <Provider store={store}>{storyFn()}</Provider>
+    return <Provider store={storyBookStore}>{storyFn()}</Provider>
 };

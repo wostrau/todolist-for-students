@@ -126,19 +126,20 @@ export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsT
             dispatch(setStatusAC('succeeded'));
         })
 };
-export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispatch<ActionsType | SetErrorActionType>) => {
+export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispatch<ActionsType | SetErrorActionType | SetStatusActionType>) => {
+    dispatch(setStatusAC('loading'));
     todolistsAPI.createTask(todolistId, title)
         .then((res) => {
             if (res.data.resultCode === 0) {
-                const task = res.data.data.item;
-                const action = addTaskAC(task);
-                dispatch(action);
+                dispatch(addTaskAC(res.data.data.item));
+                dispatch(setStatusAC('succeeded'));
             } else {
                 if (res.data.messages.length) {
                     dispatch(setErrorAC(res.data.messages[0]));
                 } else {
                     dispatch(setErrorAC('SOME ERROR OCCURRED'));
                 }
+                dispatch(setStatusAC('failed'));
             }
         });
 };
