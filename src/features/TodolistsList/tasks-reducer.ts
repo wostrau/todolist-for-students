@@ -1,70 +1,11 @@
-import {v4 as uuid4} from 'uuid';
-import {
-    AddTodolistActionType,
-    RemoveTodolistActionType,
-    SetTodolistsActionType,
-    todolistId1,
-    todolistId2
-} from './todolists-reducer';
+import {AddTodolistActionType, RemoveTodolistActionType, SetTodolistsActionType} from './todolists-reducer';
 import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskType} from '../../api/todolists-api';
 import {Dispatch} from 'redux';
 import {AppRootStateType} from '../../app/store';
-import {setAppErrorAC, SetErrorActionType, setAppStatusAC, SetStatusActionType} from '../../app/app-reducer';
+import {setAppErrorAC, SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from '../../app/app-reducer';
+import {handleServerAppError, handleServerNetworkError} from '../../utilities/error-utilities';
 
-const initialState: TaskStateType = {
-    [todolistId1]: [
-        {
-            id: uuid4(),
-            todolistId: todolistId1,
-            title: 'REACT',
-            order: 0,
-            status: TaskStatuses.New,
-            priority: TaskPriorities.Hi,
-            addedDate: '',
-            startDate: '',
-            deadline: '',
-            description: ''
-        },
-        {
-            id: uuid4(),
-            todolistId: todolistId1,
-            title: 'TYPESCRIPT',
-            order: 0,
-            status: TaskStatuses.New,
-            priority: TaskPriorities.Hi,
-            addedDate: '',
-            startDate: '',
-            deadline: '',
-            description: ''
-        },
-    ],
-    [todolistId2]: [
-        {
-            id: uuid4(),
-            todolistId: todolistId2,
-            title: 'MONITOR',
-            order: 0,
-            status: TaskStatuses.New,
-            priority: TaskPriorities.Low,
-            addedDate: '',
-            startDate: '',
-            deadline: '',
-            description: ''
-        },
-        {
-            id: uuid4(),
-            todolistId: todolistId2,
-            title: 'COMPUTER',
-            order: 0,
-            status: TaskStatuses.Completed,
-            priority: TaskPriorities.Later,
-            addedDate: '',
-            startDate: '',
-            deadline: '',
-            description: ''
-        },
-    ],
-};
+const initialState: TaskStateType = {};
 
 //reducer
 export const tasksReducer = (state: TaskStateType = initialState, action: ActionsType): TaskStateType => {
@@ -118,7 +59,7 @@ export const removeTaskAC = (taskId: string, todolistId: string) => ({
 } as const);
 
 //thunks
-export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsType | SetStatusActionType>) => {
+export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsType | SetAppStatusActionType>) => {
     dispatch(setAppStatusAC('loading'));
     todolistsAPI.getTask(todolistId)
         .then((res) => {
@@ -126,7 +67,7 @@ export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsT
             dispatch(setAppStatusAC('succeeded'));
         })
 };
-export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispatch<ActionsType | SetErrorActionType | SetStatusActionType>) => {
+export const addTaskTC = (title: string, todolistId: string) => (dispatch: ThunkDispatch) => {
     dispatch(setAppStatusAC('loading'));
     todolistsAPI.createTask(todolistId, title)
         .then((res) => {
@@ -134,21 +75,15 @@ export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispa
                 dispatch(addTaskAC(res.data.data.item));
                 dispatch(setAppStatusAC('succeeded'));
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setAppErrorAC(res.data.messages[0]));
-                } else {
-                    dispatch(setAppErrorAC('SOME ERROR OCCURRED'));
-                }
-                dispatch(setAppStatusAC('failed'));
+                handleServerAppError(res.data, dispatch);
             }
         })
         .catch((error) => {
-            dispatch(setAppErrorAC(error.message));
-            dispatch(setAppStatusAC('failed'));
+            handleServerNetworkError(error, dispatch);
         });
 };
 export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string) =>
-    (dispatch: Dispatch<ActionsType>, getState: () => AppRootStateType) => {
+    (dispatch: ThunkDispatch, getState: () => AppRootStateType) => {
         const state = getState();
         const task = state.tasks[todolistId].find(t => t.id === taskId);
         if (!task) {
@@ -166,9 +101,16 @@ export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelT
         };
         todolistsAPI.updateTask(todolistId, taskId, apiModel)
             .then((res) => {
-                const action = updateTaskAC(taskId, domainModel, todolistId);
-                dispatch(action);
+                if (res.data.resultCode === 0) {
+                    const action = updateTaskAC(taskId, domainModel, todolistId);
+                    dispatch(action);
+                } else {
+                    handleServerAppError(res.data, dispatch);
+                }
             })
+            .catch((error) => {
+                handleServerNetworkError(error, dispatch);
+            });
     };
 export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
     todolistsAPI.deleteTask(todolistId, taskId)
@@ -198,3 +140,4 @@ export type ActionsType =
     | RemoveTodolistActionType
     | SetTodolistsActionType
     | ReturnType<typeof setTasksAC>
+type ThunkDispatch = Dispatch<ActionsType | SetAppStatusActionType | SetAppErrorActionType>;
