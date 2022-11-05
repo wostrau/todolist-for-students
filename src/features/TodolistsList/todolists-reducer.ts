@@ -1,6 +1,8 @@
 import {todolistsAPI, TodolistType} from '../../api/todolists-api';
 import {RequestStatusType, setAppStatusAC, SetAppStatusActionType} from '../../app/app-reducer';
 import {Dispatch} from 'redux';
+import {ThunkAction} from 'redux-thunk';
+import {AppRootStateType} from '../../app/store';
 
 //initial state
 const initialState: Array<TodolistDomainType> = [];
@@ -49,7 +51,7 @@ export const changeEntityStatusTodolistAC = (id: string, status: RequestStatusTy
 export const removeTodolistAC = (id: string) => ({type: 'REMOVE-TODOLIST', id} as const);
 
 //thunks
-export const fetchTodolistsTC = () => (dispatch: ThunkDispatch) => {
+export const fetchTodolistsTC = (): ThunkAction<void, AppRootStateType, unknown, ActionsType> => (dispatch) => {
     dispatch(setAppStatusAC('loading'));
     todolistsAPI.getTodolists()
         .then((res) => {
@@ -96,5 +98,6 @@ export type ActionsType =
     | SetTodolistsActionType
     | ReturnType<typeof changeTitleTodolistAC>
     | ReturnType<typeof changeFilterTodolistAC>
-    | ReturnType<typeof changeEntityStatusTodolistAC>;
+    | ReturnType<typeof changeEntityStatusTodolistAC>
+    | SetAppStatusActionType;
 type ThunkDispatch = Dispatch<ActionsType | SetAppStatusActionType>;
