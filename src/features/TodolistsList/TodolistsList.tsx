@@ -34,35 +34,28 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
     }, []);
 
     const addTask = useCallback((title: string, todolistId: string) => {
-        const thunk = addTaskTC(title, todolistId);
-        dispatch(thunk);
+        dispatch(addTaskTC(title, todolistId));
     }, []);
     const removeTask = useCallback((taskId: string, todolistId: string) => {
-        const thunk = removeTaskTC(taskId, todolistId);
-        dispatch(thunk);
+        dispatch(removeTaskTC(taskId, todolistId));
     }, []);
     const changeStatus = useCallback((taskId: string, status: TaskStatuses, todolistId: string) => {
-        const thunk = updateTaskTC(taskId, {status: status}, todolistId);
-        dispatch(thunk);
+        dispatch(updateTaskTC(taskId, {status: status}, todolistId));
     }, []);
     const changeTitle = useCallback((taskId: string, newTitle: string, todolistId: string) => {
-        const thunk = updateTaskTC(taskId, {title: newTitle}, todolistId)
-        dispatch(thunk);
+        dispatch(updateTaskTC(taskId, {title: newTitle}, todolistId));
     }, []);
     const changeFilter = useCallback((value: changeFilterPropsType, todolistId: string) => {
         dispatch(changeFilterTodolistAC(todolistId, value));
-    }, [dispatch]);
+    }, []);
     const removeTodolist = useCallback((todolistId: string) => {
-        const thunk = removeTodolistTC(todolistId);
-        dispatch(thunk);
+        dispatch(removeTodolistTC(todolistId));
     }, []);
     const changeTodolistTitle = useCallback((todolistId: string, newTitle: string) => {
-        const thunk = changeTitleTodolistTC(todolistId, newTitle);
-        dispatch(thunk);
+        dispatch(changeTitleTodolistTC(todolistId, newTitle));
     }, []);
     const addTodolist = useCallback((title: string) => {
-        const thunk = addTodolistTC(title);
-        dispatch(thunk);
+        dispatch(addTodolistTC(title));
     }, []);
 
     return (

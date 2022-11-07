@@ -32,36 +32,29 @@ export const Todolist = React.memo(({demo = false, ...props}: TodolistPropsType)
         if (demo) {
             return;
         }
-        const thunk = fetchTasksTC(props.todolist.id);
-        dispatch(thunk);
+        dispatch(fetchTasksTC(props.todolist.id));
     }, []);
 
     const onAllClickHandler = useCallback(() => {
         props.changeFilter('All', props.todolist.id)
     }, [props.changeFilter, props.todolist.id]);
-
     const onActiveClickHandler = useCallback(() => {
         props.changeFilter('Active', props.todolist.id)
     }, [props.changeFilter, props.todolist.id]);
-
     const onCompletedClickHandler = useCallback(() => {
         props.changeFilter('Completed', props.todolist.id)
     }, [props.changeFilter, props.todolist.id]);
-
     const onClickRemoveTodolistHandler = useCallback(() => {
         props.removeTodolist(props.todolist.id)
     }, [props.removeTodolist, props.todolist.id]);
-
     const addTask = useCallback((title: string) => {
         props.addTask(title, props.todolist.id)
     }, [props.addTask, props.todolist.id]);
-
     const changeTodolistTitle = useCallback((newTitle: string) => {
         props.changeTodolistTitle(props.todolist.id, newTitle)
     }, [props.changeTodolistTitle, props.todolist.id]);
 
     let filterTask = props.taskList;
-
     if (props.todolist.filter === 'Active') {
         filterTask = props.taskList.filter((el => el.status === TaskStatuses.New))
     }
