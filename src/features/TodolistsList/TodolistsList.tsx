@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from '../../app/store';
+import {AppDispatch, AppRootStateType} from '../../app/store';
 import {
     addTodolistTC,
     changeFilterPropsType,
@@ -23,14 +23,14 @@ type PropsType = {
 export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists);
     const tasks = useSelector<AppRootStateType, TaskStateType>(state => state.tasks);
-    const dispatch = useDispatch();
+    const useAppDispatch = () => useDispatch<AppDispatch>();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (demo) {
             return;
         }
-        const thunk = fetchTodolistsTC();
-        dispatch(thunk);
+        dispatch(fetchTodolistsTC());
     }, []);
 
     const addTask = useCallback((title: string, todolistId: string) => {

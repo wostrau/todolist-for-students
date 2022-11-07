@@ -8,7 +8,7 @@ import {handleServerAppError, handleServerNetworkError} from '../../utilities/er
 const initialState: TaskStateType = {};
 
 //reducer
-export const tasksReducer = (state: TaskStateType = initialState, action: ActionsType): TaskStateType => {
+export const tasksReducer = (state: TaskStateType = initialState, action: TaskActionsType): TaskStateType => {
     switch (action.type) {
         case 'REMOVE-TASK':
             return {...state, [action.todolistId]: state[action.todolistId].filter(t => t.id !== action.taskId)};
@@ -59,7 +59,7 @@ export const removeTaskAC = (taskId: string, todolistId: string) => ({
 } as const);
 
 //thunks
-export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsType | SetAppStatusActionType>) => {
+export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<TaskActionsType | SetAppStatusActionType>) => {
     dispatch(setAppStatusAC('loading'));
     todolistsAPI.getTask(todolistId)
         .then((res) => {
@@ -67,7 +67,7 @@ export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsT
             dispatch(setAppStatusAC('succeeded'));
         })
 };
-export const addTaskTC = (title: string, todolistId: string) => (dispatch: ThunkDispatch) => {
+export const addTaskTC = (title: string, todolistId: string) => (dispatch: TaskThunkDispatch) => {
     dispatch(setAppStatusAC('loading'));
     todolistsAPI.createTask(todolistId, title)
         .then((res) => {
@@ -83,7 +83,7 @@ export const addTaskTC = (title: string, todolistId: string) => (dispatch: Thunk
         });
 };
 export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string) =>
-    (dispatch: ThunkDispatch, getState: () => AppRootStateType) => {
+    (dispatch: TaskThunkDispatch, getState: () => AppRootStateType) => {
         const state = getState();
         const task = state.tasks[todolistId].find(t => t.id === taskId);
         if (!task) {
@@ -112,7 +112,7 @@ export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelT
                 handleServerNetworkError(error, dispatch);
             });
     };
-export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
+export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch<TaskActionsType>) => {
     todolistsAPI.deleteTask(todolistId, taskId)
         .then((res) => {
             const action = removeTaskAC(taskId, todolistId);
@@ -132,7 +132,7 @@ export type UpdateDomainTaskModelType = {
     startDate?: string
     deadline?: string
 };
-export type ActionsType =
+export type TaskActionsType =
     | ReturnType<typeof removeTaskAC>
     | ReturnType<typeof addTaskAC>
     | ReturnType<typeof updateTaskAC>
@@ -140,4 +140,5 @@ export type ActionsType =
     | RemoveTodolistActionType
     | SetTodolistsActionType
     | ReturnType<typeof setTasksAC>
-type ThunkDispatch = Dispatch<ActionsType | SetAppStatusActionType | SetAppErrorActionType>;
+type TaskThunkDispatch = Dispatch<TaskActionsType | SetAppStatusActionType | SetAppErrorActionType>;
+
