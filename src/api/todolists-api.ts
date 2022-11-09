@@ -11,7 +11,7 @@ const instance = axios.create({
     ...settings
 });
 
-//api
+//api-todolist
 export const todolistsAPI = {
     getTodolists() {
         return instance.get<TodolistType[]>('todo-lists');
@@ -46,7 +46,21 @@ export const todolistsAPI = {
     },
 };
 
+//api-auth
+export const authAPI = {
+    login(data: LoginParamTypes) {
+        const promise = instance.post<ResponseType<{userId?: number}>>('auth/login', data);
+        return promise;
+    }
+};
+
 //types
+export type LoginParamTypes = {
+    email: string
+    password: string
+    rememberMe: boolean
+    captcha?: string
+};
 export type ResponseType<D = {}> = {
     resultCode: number
     messages: Array<string>
@@ -83,6 +97,8 @@ export type UpdateTaskType = {
     startDate: string
     deadline: string
 };
+
+//types-enums
 export enum TaskStatuses {
     New,
     InProgress,

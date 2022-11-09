@@ -2,8 +2,13 @@ import React from 'react';
 import {Button, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@mui/material';
 import {CheckBox} from '@mui/icons-material';
 import {useFormik} from 'formik';
+import {useDispatch} from 'react-redux';
+import {loginTC, LoginThunkDispatch} from './login-reducer';
 
 export const Login = () => {
+    const useAppDispatch = () => useDispatch<LoginThunkDispatch>();
+    const dispatch = useAppDispatch();
+
     const formik = useFormik({
         validate: (values) => {
             if (!values.email) {
@@ -19,7 +24,7 @@ export const Login = () => {
             rememberMe: false
         },
         onSubmit: values => {
-            alert(JSON.stringify(values))
+            dispatch(loginTC(values));
         }
     });
 
@@ -31,7 +36,21 @@ export const Login = () => {
             <form onSubmit={formik.handleSubmit}>
                 <FormControl>
                     <FormLabel>
-                        //нужно что-то добавить!!!
+                        <p>
+                            To log in get registered <a
+                            href={'https://social-network.samuraijs.com/'}
+                            target={'_blank'}
+                        >here</a>
+                        </p>
+                        <p>
+                            or common test account credentials:
+                        </p>
+                        <p>
+                            Email: free@samuraijs.com
+                        </p>
+                        <p>
+                            Password: free
+                        </p>
                     </FormLabel>
                     <FormGroup>
                         <TextField
@@ -53,7 +72,7 @@ export const Login = () => {
                             control={
                                 <CheckBox
                                     {...formik.getFieldProps('rememberMe')}
-                                    checked={formik.values.rememberMe}
+                                    //checked={formik.values.rememberMe}
                                 />
                             }
                         />
