@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {
@@ -16,8 +17,8 @@ import {TodolistsList} from '../features/TodolistsList/TodolistsList';
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 import {AppDispatch, AppRootStateType} from './store';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppThunkDispatch, initializeAppTC, RequestStatusType} from './app-reducer';
-import {Route} from 'react-router-dom';
+import {initializeAppTC, RequestStatusType} from './app-reducer';
+import {Route, Routes} from 'react-router-dom';
 import {Login} from '../features/TodolistsList/Login/Login';
 import {logoutTC} from '../features/TodolistsList/Login/auth-reducer';
 
@@ -36,9 +37,9 @@ function App({demo = false}: PropsType) {
         dispatch(initializeAppTC());
     }, []);
 
-    const logoutHandler = useCallback(()=>{
+    const logoutHandler = useCallback(() => {
         dispatch(logoutTC());
-    },[]);
+    }, []);
 
     if (!isInitialized) {
         return <div style={
@@ -53,6 +54,8 @@ function App({demo = false}: PropsType) {
         </div>
     }
 
+    // @ts-ignore
+    // @ts-ignore
     return (
         <div className="App">
             <ErrorSnackbar/>
@@ -77,14 +80,10 @@ function App({demo = false}: PropsType) {
                 </AppBar>
             </Box>
             <Container fixed>
-                <>
-                    <Route path={'/'}>
-                        <TodolistsList demo={demo}/>
-                    </Route>
-                    <Route path={'/login'}>
-                        <Login/>
-                    </Route>
-                </>
+                <Routes>
+                    <Route path={'/'} element={<TodolistsList demo={demo}/>}/>
+                    <Route path={'/login'} element={<Login/>}/>
+                </Routes>
             </Container>
         </div>
     )

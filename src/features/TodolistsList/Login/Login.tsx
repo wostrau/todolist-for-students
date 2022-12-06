@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import {Button, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@mui/material';
 import {CheckBox} from '@mui/icons-material';

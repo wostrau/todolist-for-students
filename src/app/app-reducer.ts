@@ -47,7 +47,7 @@ export type InitialStateType = {
     status: RequestStatusType
     // если ошибка какая-то глобальная произойдет - мы запишем текст ошибки сюда
     error: string | null
-    // true когда приложение проинициализировалось (проверили юзера ,настройки получили и т.д.)
+    // true когда приложение проинициализировалось (проверили юзера, настройки получили и т.д.)
     isInitialized: boolean
 };
 export type SetAppErrorActionType = ReturnType<typeof setAppErrorAC>;

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, AppRootStateType} from '../../app/store';
