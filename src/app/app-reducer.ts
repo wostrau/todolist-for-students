@@ -1,7 +1,8 @@
 import {authAPI} from '../api/todolists-api';
-import {AuthActionsType, setIsLoggedInAC} from '../features/TodolistsList/Login/auth-reducer';
+import {setIsLoggedInAC} from '../features/TodolistsList/Login/auth-reducer';
 import {ThunkDispatch} from 'redux-thunk';
 import {AppRootStateType} from './store';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 const initialState: InitialStateType = {
     status: 'idle',
@@ -9,8 +10,26 @@ const initialState: InitialStateType = {
     isInitialized: false
 };
 
+//slice
+const slice = createSlice({
+    name: 'app',
+    initialState: initialState,
+    reducers: {
+        setAppErrorAC(state, action: PayloadAction<{error: null | string}>) {
+            state.error = action.payload.error;
+        },
+        setAppStatusAC(state, action: PayloadAction<{status: RequestStatusType}>) {
+            state.status = action.payload.status;
+        },
+        setAppInitializedAC(state, action: PayloadAction<{isInitialized: boolean}>) {
+            state.isInitialized = action.payload.isInitialized;
+        }
+    }
+});
+
 //reducer
-export const appReducer = (state: InitialStateType = initialState, action: AppActionsType): InitialStateType => {
+export const appReducer = slice.reducer;
+/*(state: InitialStateType = initialState, action: AppActionsType): InitialStateType => {
     switch (action.type) {
         case 'APP/SET-STATUS':
             return {...state, status: action.status}
@@ -22,21 +41,23 @@ export const appReducer = (state: InitialStateType = initialState, action: AppAc
             return {...state}
     }
 };
+*/
 
 //actions
-export const setAppErrorAC = (error: string | null) => ({type: 'APP/SET-ERROR', error} as const);
-export const setAppStatusAC = (status: RequestStatusType) => ({type: 'APP/SET-STATUS', status} as const);
-export const setAppInitializedAC = (isInitialized: boolean) => ({type: 'APP/SET-IS-INITIALIZED', isInitialized} as const);
+export const {setAppErrorAC, setAppStatusAC, setAppInitializedAC} = slice.actions;
+//(error: string | null) => ({type: 'APP/SET-ERROR', error} as const);
+//(status: RequestStatusType) => ({type: 'APP/SET-STATUS', status} as const);
+//(isInitialized: boolean) => ({type: 'APP/SET-IS-INITIALIZED', isInitialized} as const);
 
 //thunks
 export const initializeAppTC = () => (dispatch: AppThunkDispatch) => {
     authAPI.me().then(res => {
         if (res.data.resultCode === 0) {
-            dispatch(setIsLoggedInAC(true))
+            dispatch(setIsLoggedInAC({isLoggedIn: true}))
         } else {
 
         }
-        dispatch(setAppInitializedAC(true))
+        dispatch(setAppInitializedAC({isInitialized: true}))
     })
 };
 
@@ -56,5 +77,5 @@ export type AppActionsType =
     | SetAppErrorActionType
     | SetAppStatusActionType
     | ReturnType<typeof setAppInitializedAC>
-    | AuthActionsType
+    | ReturnType<typeof setIsLoggedInAC>
 export type AppThunkDispatch = ThunkDispatch<AppRootStateType, unknown, AppActionsType>

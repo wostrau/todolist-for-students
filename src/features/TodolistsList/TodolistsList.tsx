@@ -35,32 +35,32 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
             return;
         }
         dispatch(fetchTodolistsTC());
-    }, []);
+    }, [demo, dispatch, isLoggedIn]);
 
     const addTask = useCallback((title: string, todolistId: string) => {
         dispatch(addTaskTC(title, todolistId));
-    }, []);
+    }, [dispatch]);
     const removeTask = useCallback((taskId: string, todolistId: string) => {
         dispatch(removeTaskTC(taskId, todolistId));
-    }, []);
+    }, [dispatch]);
     const changeStatus = useCallback((taskId: string, status: TaskStatuses, todolistId: string) => {
         dispatch(updateTaskTC(taskId, {status: status}, todolistId));
-    }, []);
+    }, [dispatch]);
     const changeTitle = useCallback((taskId: string, newTitle: string, todolistId: string) => {
         dispatch(updateTaskTC(taskId, {title: newTitle}, todolistId));
-    }, []);
+    }, [dispatch]);
     const changeFilter = useCallback((value: changeFilterPropsType, todolistId: string) => {
         dispatch(changeFilterTodolistAC(todolistId, value));
-    }, []);
+    }, [dispatch]);
     const removeTodolist = useCallback((todolistId: string) => {
         dispatch(removeTodolistTC(todolistId));
-    }, []);
+    }, [dispatch]);
     const changeTodolistTitle = useCallback((todolistId: string, newTitle: string) => {
         dispatch(changeTitleTodolistTC(todolistId, newTitle));
-    }, []);
+    }, [dispatch]);
     const addTodolist = useCallback((title: string) => {
         dispatch(addTodolistTC(title));
-    }, []);
+    }, [dispatch]);
 
     if (!isLoggedIn) {
         return redirect('/login');

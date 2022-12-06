@@ -3,7 +3,7 @@ import {TodolistActionsType, todolistsReducer} from '../features/TodolistsList/t
 import {TaskActionsType, tasksReducer} from '../features/TodolistsList/tasks-reducer';
 import {AppActionsType, appReducer, SetAppErrorActionType, SetAppStatusActionType} from './app-reducer';
 import thunkMiddleware, {ThunkDispatch} from 'redux-thunk';
-import {AuthActionsType, authReducer} from '../features/TodolistsList/Login/auth-reducer';
+import {authReducer} from '../features/TodolistsList/Login/auth-reducer';
 import {configureStore} from '@reduxjs/toolkit';
 
 const rootReducer = combineReducers({
@@ -25,7 +25,6 @@ export type AppRootStateType = ReturnType<typeof rootReducer>;
 type EntireAppActionsType =
     | TodolistActionsType
     | TaskActionsType
-    | AuthActionsType
     | SetAppStatusActionType
     | SetAppErrorActionType
     | AppActionsType
