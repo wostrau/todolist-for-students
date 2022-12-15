@@ -72,7 +72,6 @@ test('correct task should be deleted from correct way', () => {
 test('new task should be added correctly', () => {
     //const action = addTaskAC('HEADPHONES', 'todolistId2');
     const action = addTaskAC({
-        task: {
             todolistId: 'todolistId2',
             status: TaskStatuses.New,
             addedDate: '',
@@ -83,8 +82,7 @@ test('new task should be added correctly', () => {
             title: 'HEADPHONES',
             priority: TaskPriorities.Middle,
             startDate: ''
-        }
-    });
+        });
 
     const endState = tasksReducer(startState, action);
 

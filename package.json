@@ -36,12 +36,17 @@
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.0"
   },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(axios|react-day-picker)/)"
+    ]
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 6006 -s public",
+    "storybook": "start-storybook -p 6006 -s public --no-dll",
     "build-storybook": "build-storybook -s public",
     "test-storybook": "test-storybook",
     "jest:integration": "jest -c integration/jest.config.js",
@@ -90,11 +95,13 @@
     "@storybook/react": "^6.5.10",
     "@storybook/test-runner": "^0.7.1",
     "@storybook/testing-library": "^0.0.13",
+    "@types/storybook-react-router": "^1.0.2",
     "babel-plugin-named-exports-order": "^0.0.2",
     "jest": "27",
     "prop-types": "^15.8.1",
     "puppeteer": "^17.1.1",
     "react-test-renderer": "^18.2.0",
+    "storybook-react-router": "^1.0.8",
     "webpack": "^5.74.0"
   }
 }

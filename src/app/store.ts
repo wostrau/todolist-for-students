@@ -13,6 +13,8 @@ const rootReducer = combineReducers({
     auth: authReducer
 });
 
+export type RootReducerType = typeof rootReducer;
+
 // Deprecated method of creating a Redux store (switched to configureStore method):
 //export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
@@ -21,7 +23,7 @@ export const store = configureStore({
     middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(thunkMiddleware)
 });
 
-export type AppRootStateType = ReturnType<typeof rootReducer>;
+export type AppRootStateType = ReturnType<RootReducerType>;
 type EntireAppActionsType =
     | TodolistActionsType
     | TaskActionsType
